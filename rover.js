@@ -13,68 +13,75 @@ class Rover {
 
       this.mode = 'NORMAL';
       this.generatorWatts = 110;
-
    }
-   
-   
-   // Updates certain properties of the rover object
-   receiveMessage(my_message = new Message) { // message is a Message object
-   
-      // Returns an object containing at least two properties:
-      let result = [];
-
-      for (command in my_message.length) { //<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-         // Number representing the position the rover should move to.       
-         if (my_message.commandType == 'MOVE'){ 
-            Rover.position = value; 
-            result += `{completed: true}`;
-         }
-         // No values sent with this command.
-         else if (my_message.commandType == 'STATUS_CHECK'){ 
-            result +=`{completed: true, roverStatus: {mode: ${Rover.mode}, generatorWatts: ${Rover.generatorWatts}, position: ${Rover.position}}}`;
-         }
-         //String representing rover mode
-         else if (my_message.commandType == 'MODE_CHANGE'){ 
-            Rover.mode = value;
-            result +=`{completed: true}`;
-         }
-      } 
-
-      let rover_object = {
-         
-         // message: the name of the original Message object
-         'message': my_message.name,         
-         
-         // results: an array of results. Each element in the array is an object that corresponds to one Command in message.commands.
-         'results': (my_message.commands)//.map(my_message => `${my_message.commands}`) //<<<<<<<<<<<<<<<<<???????????
       
-      /*console.log('\nAll Animals\n-------------------')
-      let animal_name_ID =  animals.map(animals => `[${animals.astronautID}] ${animals.name}`)
-      animal_name_ID = animal_name_ID.sort().join('\n'); 
-      console.log(animal_name_ID)*/
-      };
-      
+   // Updates certain properties of the rover object. Returns an object containing at least two properties
+   receiveMessage(my_message) { // message is a Message object
 
-      return rover_object;
+      let my_results = [];
+
+         //for (sent_index in my_message.commands.length) { //<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+         for (let sent_index = 0;  sent_index < my_message.commands.length; sent_index++) {             
+
+            // Declare Objects
+            let roverCompletion = {completed: false} 
+            let roverStatus = {mode: this.mode, generatorWatts: this.generatorWatts, position: this.position,};
+
+            // Determine the commandType
+            let my_command = my_message.commands[sent_index].commandType;
+
+            // Number representing the position the rover should move to      
+            if (my_command === 'MOVE' && this.mode !== 'LOW_POWER'){ 
+               roverCompletion.completed = true;
+               this.position =  my_message.commands[sent_index].value; 
+            }
+
+            // No values sent with this commandType
+            else if (my_command === 'STATUS_CHECK'){  
+               roverCompletion.completed = true;
+               roverCompletion.roverStatus =  roverStatus;      
+            }
+
+            //String representing rover mode
+            else if (my_command === 'MODE_CHANGE'){ 
+               roverCompletion.completed = true; 
+               this.mode = my_message.commands[sent_index].value;
+            }
+         
+            // Append the result. Note the response value for completed will remain false if the command could NOT be completed.
+            my_results.push(roverCompletion);
+      }
+
+         let rover_object = {
+               
+               // message: the name of the original Message object
+               message: my_message.name,         
+               
+               // results: an array of results. Each element in the array is an object that corresponds to one Command in message.commands.
+               results: my_results,
+            };
+         
+            return rover_object;
    }
-
-  // The response value for completed will be false if the command could NOT be completed.
-
 }  
 
-//
 // INSIDER CHECKS
+let commands = [  new Command('STATUS_CHECK'), 
+                  new Command('MOVE', 12000), 
+                  new Command('STATUS_CHECK'),
+                  new Command('MODE_CHANGE', 'LOW_POWER'),
+                  new Command('MOVE', 15000), 
+                  new Command('STATUS_CHECK'),
+                  new Command('MODE_CHANGE', 'NORMAL'),
+                  new Command('MOVE', 15000), 
+                  new Command('STATUS_CHECK')];
 
-let commands = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')];
-let message = new Message('Test message with two commands', commands);
-
-let rover = new Rover(98382);    // Passes 98382 as the rover's position.
+let message = new Message(`Sending ${commands.length} commands`, commands);
+let rover = new Rover(10000);    // Passes the rover's position.
 let response = rover.receiveMessage(message);
 
 console.log("\n*******************");
-console.log(response);
+console.dir(response);
 
-//
-
+// EXPORT MODULE
 module.exports = Rover; 
