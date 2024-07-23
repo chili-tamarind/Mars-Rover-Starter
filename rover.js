@@ -24,11 +24,11 @@ class Rover {
          for (let sent_index = 0;  sent_index < my_message.commands.length; sent_index++) {             
 
             // Declare Objects
-            let roverCompletion = {completed: false} 
-            let roverStatus = {mode: this.mode, generatorWatts: this.generatorWatts, position: this.position,};
+            const roverCompletion = {completed: false} 
+            const roverStatus = {mode: this.mode, generatorWatts: this.generatorWatts, position: this.position,};
 
             // Determine the commandType
-            let my_command = my_message.commands[sent_index].commandType;
+            const my_command = my_message.commands[sent_index].commandType;
 
             // Number representing the position the rover should move to      
             if (my_command === 'MOVE' && this.mode !== 'LOW_POWER'){ 
@@ -52,7 +52,7 @@ class Rover {
             my_results.push(roverCompletion);
       }
 
-         let rover_object = {
+         const rover_object = {
                
                // message: the name of the original Message object
                message: my_message.name,         
@@ -66,7 +66,7 @@ class Rover {
 }  
 
 // INSIDER CHECKS
-let commands = [  new Command('STATUS_CHECK'), 
+const commands = [  new Command('STATUS_CHECK'), 
                   new Command('MOVE', 12000), 
                   new Command('STATUS_CHECK'),
                   new Command('MODE_CHANGE', 'LOW_POWER'),
@@ -76,9 +76,9 @@ let commands = [  new Command('STATUS_CHECK'),
                   new Command('MOVE', 15000), 
                   new Command('STATUS_CHECK')];
 
-let message = new Message(`Sending ${commands.length} commands`, commands);
-let rover = new Rover(10000);    // Passes the rover's position.
-let response = rover.receiveMessage(message);
+const message = new Message(`Sending ${commands.length} commands`, commands);
+const rover = new Rover(10000);    // Passes the rover's position.
+const response = rover.receiveMessage(message);
 
 console.log("\n*******************");
 console.dir(response);

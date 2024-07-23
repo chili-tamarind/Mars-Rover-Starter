@@ -18,9 +18,9 @@ class Command {
 // INSIDER CHECKS
 // note that a command type will be one of the following: MODE_CHANGE, MOVE, or STATUS_CHECK.
 
-let modeCommand = new Command('MODE_CHANGE', 'LOW_POWER');
-let moveCommand = new Command('MOVE', 12000);
-let statusCommand = new Command('STATUS_CHECK');
+const modeCommand = new Command('MODE_CHANGE', 'LOW_POWER');
+const moveCommand = new Command('MOVE', 12000);
+const statusCommand = new Command('STATUS_CHECK');
 
 console.log(modeCommand);
 console.log(moveCommand);

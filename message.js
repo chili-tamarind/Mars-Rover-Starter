@@ -18,12 +18,12 @@ class Message {
 /*
 // INSIDER CHECKS
 
-let modeCommand = new Command('MODE_CHANGE', 'LOW_POWER');
-let moveCommand = new Command('MOVE', 12000);
-let statusCommand = new Command('STATUS_CHECK');
+const modeCommand = new Command('MODE_CHANGE', 'LOW_POWER');
+const moveCommand = new Command('MOVE', 12000);
+const statusCommand = new Command('STATUS_CHECK');
 
-let my_commands = [modeCommand, moveCommand, statusCommand];
-let my_message = new Message('Test message with two commands', my_commands);
+const my_commands = [modeCommand, moveCommand, statusCommand];
+const my_message = new Message('Test message with two commands', my_commands);
 
 console.log(my_message);
 */

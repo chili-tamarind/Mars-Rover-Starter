@@ -14,27 +14,27 @@ describe("Command class", function() {
   
     //  note that a command type will be one of the following: MODE_CHANGE, MOVE, or STATUS_CHECK
         
-      let allowed_commandType =  ['MODE_CHANGE', 'MOVE', 'STATUS_CHECK'];
+    const allowed_commandType =  ['MODE_CHANGE', 'MOVE', 'STATUS_CHECK'];
       
       //expect(allowed_commandType.includes(Command.commandType)).toEqual(true)
       
-        let command_1 = new Command('MOVE', 4321);
+      const command_1 = new Command('MOVE', 4321);
         expect(allowed_commandType.includes(command_1.commandType)).toEqual(true);
 
-        let command_2 = new Command('STATUS_CHECK');
-        expect(allowed_commandType.includes(command_2.commandType)).toEqual(true);
+      const command_2 = new Command('STATUS_CHECK');
+      expect(allowed_commandType.includes(command_2.commandType)).toEqual(true);
 
-        let command_3 = new Command('MODE_CHANGE', 'LOW_POWER');
-        expect(allowed_commandType.includes(command_3.commandType)).toEqual(true);
+      const command_3 = new Command('MODE_CHANGE', 'LOW_POWER');
+      expect(allowed_commandType.includes(command_3.commandType)).toEqual(true);
 
-        let command_4 = new Command('MOVE', 3579);
-        expect(allowed_commandType.includes(command_4.commandType)).toEqual(true);
+      const command_4 = new Command('MOVE', 3579);
+      expect(allowed_commandType.includes(command_4.commandType)).toEqual(true);
 
-        let command_5 = new Command('STATUS_CHECK');
-        expect(allowed_commandType.includes(command_5.commandType)).toEqual(true);
+      const command_5 = new Command('STATUS_CHECK');
+      expect(allowed_commandType.includes(command_5.commandType)).toEqual(true);
 
-        let command_6 = new Command('MEH');
-        expect(allowed_commandType.includes(command_6.commandType)).toEqual(false);       
+      const command_6 = new Command('MEH');
+      expect(allowed_commandType.includes(command_6.commandType)).toEqual(false);       
   });
 
 
