@@ -20,8 +20,7 @@ class Rover {
 
       let my_results = [];
 
-         //for (sent_index in my_message.commands.length) { //<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
-         for (let sent_index = 0;  sent_index < my_message.commands.length; sent_index++) {             
+            for (let sent_index = 0;  sent_index < my_message.commands.length; sent_index++) {             
 
             // Declare Objects
             const roverCompletion = {completed: false} 

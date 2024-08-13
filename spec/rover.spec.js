@@ -17,7 +17,6 @@ describe("Rover class", function() {
 
   // TEST 7
   test("constructor sets position and default values for mode and generatorWatts", function() {        
-    
     my_rover = new Rover(2000);
 
     expect(my_rover.position).toEqual(2000);
@@ -27,6 +26,7 @@ describe("Rover class", function() {
   
   // TEST 8
   test("response returned by receiveMessage contains the name of the message", function() {
+    
     expect(my_response.message).toEqual(my_message.name);
   });
 
@@ -43,19 +43,25 @@ describe("Rover class", function() {
 
   // TEST 10
   test("responds correctly to the status check command", function() {
-    for (my_com in my_message.commands.length) {
-      if (my_message.commands[my_com].commandType === 'STATUS_CHECK') {
-          expect(my_response.results.roverStatus).toEqualInstanceOf(roverStatus);
-          expect(my_response.results.roverStatus.mode).toEqual(my_rover.mode);   
-          expect(my_response.results.roverStatus.generatorWatts).toEqual(my_rover.generatorWatts);    
+
+    let results_T10 = my_response.results;
+
+    for (my_com in results_T10.length) {
+      if (results_T10[my_com].commandType === 'STATUS_CHECK') {
+          expect(results_T10.roverStatus).toEqualInstanceOf(roverStatus);
+          expect(results_T10.roverStatus.mode).toEqual(my_rover.mode);   
+          expect(results_T10.roverStatus.generatorWatts).toEqual(my_rover.generatorWatts);    
           expect(my_response.results.roverStatus.position).toEqual(my_rover.position);
       }}   
   });
 
   // TEST 11
   test("responds correctly to the mode change command", function() {
-    for (my_com in my_message.commands.length) {
-      if (my_message.commands[my_com].commandType === 'MOVE') {
+
+    let results_T11 = my_response.results;
+
+    for (my_com in results_T11.length) {
+      if (results_T11[my_com].commandType === 'MOVE') {
         if (my_rover.mode === 'NORMAL'){
 
           expect(roverCompletion.completed).toEqual(true); }}}  // TEST 13 checks position
@@ -64,17 +70,21 @@ describe("Rover class", function() {
   // TEST 12
   test("responds with a false completed value when attempting to move in LOW_POWER mode", function() {
     
-    for (my_com in my_message.commands.length) {
-      if (my_message.commands[my_com].commandType === 'MOVE') {
+    let results_T12 = my_response.results;
+    
+    for (my_com in results_T12.length) {
+      if (results_T12[my_com].commandType === 'MOVE') {
         if (my_rover.mode === 'LOW_POWER'){
           expect(roverCompletion.completed).toEqual(false); }}}  
   });
 
   // TEST 13
   test("responds with the position for the move command", function() {
+
+    let results_T13 = my_response.results;
     
-    for (my_com in my_message.commands.length) {
-      if (my_message.commands[my_com].commandType === 'MODE_CHANGE')
+    for (my_com in results_T13.length) {
+      if (results_T13[my_com].commandType === 'MODE_CHANGE')
         expect(my_rover.position).toEqual(my_message.commands[sent_command].value);
       }
   });
