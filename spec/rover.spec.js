@@ -4,89 +4,91 @@ const Command = require('../command.js');
 
 // Use Jest Runner extension
 
-beforeEach(function () { // Test data is reset each time
+beforeEach(function () {
+  
+  sentCommands = [new Command('STATUS_CHECK'), 
+    new Command('MOVE', 12000), 
+    new Command('STATUS_CHECK'),
+    new Command('MODE_CHANGE', 'LOW_POWER'),
+    new Command('MOVE', 15000), 
+    new Command('STATUS_CHECK'),
+    new Command('MODE_CHANGE', 'NORMAL'),
+    new Command('MOVE', 11000), 
+    new Command('STATUS_CHECK')];
 
-  // BASE TEST OBJECT
-  my_commands = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK'), new Command('MOVE', 12000), new Command('STATUS_CHECK')];
-  my_message = new Message(`Sending ${my_commands.length} commands`, my_commands);
-  my_rover = new Rover(10000);    // Passes the rover's position.
-  my_response = my_rover.receiveMessage(my_message);
+  sentMessage = new Message(`Sending ${sentCommands.length} sentCommands`, sentCommands);
+  sentRover = new Rover(1500); 
+  sentResponse = sentRover.receiveMessage(sentMessage);
+  sentResults = sentResponse.results;
+
 });
 
-describe("Rover class", function() {
+describe("Rover class", function () {
 
   // TEST 7
-  test("constructor sets position and default values for mode and generatorWatts", function() {        
-    my_rover = new Rover(2000);
+  test("constructor sets position and default values for mode and generatorWatts", function () {
 
-    expect(my_rover.position).toEqual(2000);
-    expect(my_rover.mode).toEqual('NORMAL');
-    expect(my_rover.generatorWatts).toEqual(110);
+    sentRoverTest7 = new Rover(404); 
+
+    expect(sentRoverTest7.position).toEqual(404);
+    expect(sentRoverTest7.mode).toEqual('NORMAL');
+    expect(sentRoverTest7.generatorWatts).toEqual(110);
   });
-  
+
   // TEST 8
-  test("response returned by receiveMessage contains the name of the message", function() {
-    
-    expect(my_response.message).toEqual(my_message.name);
+  test("response returned by receiveMessage contains the name of the message", function () {
+
+    expect(sentResponse.message).toEqual(sentMessage.name);
   });
 
   // TEST 9
-  test("response returned by receiveMessage includes two results if two commands are sent in the message", function() {
-    
-    let my_commands_T9 = [new Command('MOVE', 12000), new Command('STATUS_CHECK')];
-    let my_message_T9 = new Message(`Sending ${my_commands_T9.length} commands`, my_commands_T9);
-    let my_rover_T9 = new Rover(10000);    // Passes the rover's position.
-    let my_response_T9 = my_rover_T9.receiveMessage(my_message_T9);
-    
-    expect(my_response_T9.results.length).toEqual(my_commands_T9.length);
+  test("response returned by receiveMessage includes two results if two commands are sent in the message", function () {
+
+    expect(sentResponse.results.length).toEqual(sentCommands.length);
   });
 
   // TEST 10
-  test("responds correctly to the status check command", function() {
+  test("responds correctly to the status check command", function () {
 
-    let results_T10 = my_response.results;
-
-    for (my_com in results_T10.length) {
-      if (results_T10[my_com].commandType === 'STATUS_CHECK') {
-          expect(results_T10.roverStatus).toEqualInstanceOf(roverStatus);
-          expect(results_T10.roverStatus.mode).toEqual(my_rover.mode);   
-          expect(results_T10.roverStatus.generatorWatts).toEqual(my_rover.generatorWatts);    
-          expect(my_response.results.roverStatus.position).toEqual(my_rover.position);
-      }}   
+    for (sentCommands in sentResponse.length) {
+      if (sentResponse[sentCommands].commandType === 'STATUS_CHECK') {
+        expect(sentResults.roverStatus).toEqualInstanceOf(roverStatus);
+        expect(sentResults.roverStatus.mode).toEqual(rover.mode);
+        expect(sentResults.roverStatus.generatorWatts).toEqual(rover.generatorWatts);
+        expect(response.results.roverStatus.position).toEqual(rover.position);
+      }
+    }
   });
 
   // TEST 11
-  test("responds correctly to the mode change command", function() {
+  test("responds correctly to the mode change command", function () {
 
-    let results_T11 = my_response.results;
-
-    for (my_com in results_T11.length) {
-      if (results_T11[my_com].commandType === 'MOVE') {
-        if (my_rover.mode === 'NORMAL'){
-
-          expect(roverCompletion.completed).toEqual(true); }}}  // TEST 13 checks position
+    for (sentCommands in sentResults.length) {
+      if (sentResults[sentCommands].commandType === 'MOVE') {
+        if (rover.mode === 'NORMAL') {
+          expect(roverCompletion.completed).toEqual(true);
+        }
+      }
+    }
   });
 
   // TEST 12
-  test("responds with a false completed value when attempting to move in LOW_POWER mode", function() {
-    
-    let results_T12 = my_response.results;
-    
-    for (my_com in results_T12.length) {
-      if (results_T12[my_com].commandType === 'MOVE') {
-        if (my_rover.mode === 'LOW_POWER'){
-          expect(roverCompletion.completed).toEqual(false); }}}  
+  test("responds with a false completed value when attempting to move in LOW_POWER mode", function () {
+
+    for (sentCommands in sentResults.length) {
+      if (sentResults[sentCommands].commandType === 'MOVE') {
+        if (rover.mode === 'LOW_POWER') {
+          expect(roverCompletion.completed).toEqual(false);
+    }}};
   });
 
   // TEST 13
-  test("responds with the position for the move command", function() {
+  test("responds with the position for the move command", function () {
 
-    let results_T13 = my_response.results;
-    
-    for (my_com in results_T13.length) {
-      if (results_T13[my_com].commandType === 'MODE_CHANGE')
-        expect(my_rover.position).toEqual(my_message.commands[sent_command].value);
-      }
+    for (sentCommands in sentResults.length) {
+      if (sentResults[sentCommands].commandType === 'MODE_CHANGE')
+        expect(rover.position).toEqual(message.commands[sentCommand].value);
+    }
   });
 
 });
