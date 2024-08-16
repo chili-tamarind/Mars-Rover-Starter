@@ -23,3 +23,5 @@ After these initial checks, your TA will run the tests inside `studentgrade.spec
 If you would like to see if your work will pass the grading tests, run the tests inside that file by changing the extension to `spec.js`. 
 
 When you are ready, submit the link to your github repository link in Canvas!
+
+# This code does not bring joy
