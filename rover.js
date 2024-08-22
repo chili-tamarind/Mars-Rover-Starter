@@ -52,7 +52,7 @@ class Rover {
    }
 }  
 
-// EXAMPLE
+/* EXAMPLE
 const commands = [new Command('STATUS_CHECK'), 
                   new Command('MOVE', 12000), 
                   new Command('STATUS_CHECK'),
@@ -68,6 +68,17 @@ const rover = new Rover(10000);
 const response = rover.receiveMessage(message);
 
 console.dir(response);
+*/
+
+
+let sentMessage = new Message(`This is Test 10`, [new Command('STATUS_CHECK')]);
+let sentRover = new Rover(101010); 
+let sentResponse = sentRover.receiveMessage(sentMessage); 
+let sentResults = sentResponse.results;
+
+console.dir("___________________________")
+console.dir(sentResults[0])//.roverCompletion.completed)
+
 
 // EXPORT MODULE
 module.exports = Rover; 
